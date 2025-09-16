@@ -146,7 +146,7 @@ def get_results(map_info: MapInfo, destinations_with_paths: typing.List["Destina
         )
 
     total_risk = sum(site_result["risk"] for site_result in results_dict.values())
-    total_length = sum(site_results["length"] for site_result in results_dict)
+    total_length = sum(site_result["length"] for site_result in results_dict.values())
     results_str += "\nTotal Risk: {}".format(total_risk)
     results_str += "\nTotal Length: {}".format(total_length)
 

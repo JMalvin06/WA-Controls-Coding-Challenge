@@ -32,22 +32,28 @@ class PathPlanner:
         The default construction shows this format, and should produce 10 invalid paths.
         """
         for site in self.destinations:
+            # generate unweighted minimum length path
             normal_path = self.generate_path(self.map_info.start_coord, site, 0)
             min_path = normal_path
             min_score = get_path_risk(self.map_info, normal_path) + get_path_length(normal_path)/3
-            min_weight = 0
+            
+            # determine if path travels through risk area or is already maximum length
             if not (get_path_risk(self.map_info, normal_path) == 0 or get_path_length(normal_path) >= 50):
-                iterations = 25
+                iterations = 25 # arbitrary value determined through testing
+                # create paths with different risk penalty values
                 for i in range(iterations, 2*iterations+1, 1):
                     w = i/float(iterations)
                     path_array = self.generate_path(self.map_info.start_coord, site, w)
-                    path_score = get_path_risk(self.map_info, path_array) + get_path_length(path_array)/3
+                    # path_score weighs risk more than path length
+                    path_score = get_path_risk(self.map_info, path_array) + get_path_length(path_array)/3 
+                    
                     if path_score < min_score and get_path_length(path_array) <= 50:
                         min_score = path_score
                         min_path = path_array
             else:
                 print("Path either not risky or max length: " + site.name)
             
+            # use path with minimum path_score value
             path_coords = [Coordinate(arr[0], arr[1]) for arr in min_path]
             site.set_path(path_coords)
             
@@ -64,30 +70,33 @@ class PathPlanner:
             nodes = self.generate_nodes(current_location, path_array)
             min_f = math.inf
             node_scores = []
-            min_node = []
             
+            # determine minimum f score from nodes
             for node in nodes:
                 if(node == site.coord):
                     path_array.append(site.coord)
                     found_end = True
                     return path_array
                     
+                # weight determined based on if node is in a risk zone, multiplied by penalty value
                 weight = self.map_info.risk_zones[node]*risk_coeff
                 g = math.dist(self.map_info.start_coord, current_location) + math.dist(current_location, node)
                 h = math.dist(node, site.coord)
                 f = g + h + weight
-                node_scores.append(({"node":node,"g":g,"h":h,"f":f}))
+                node_scores.append({"node":node,"g":g,"h":h,"f":f})
                 
                 if f < min_f:
                     min_f = f
-                    min_node = node
-             
+            
+            # TODO simplify the process of finding minimum nodes
             min_scores = []
             for score in node_scores:
                 if score["f"] == min_f:
                     min_scores.append(score)
-                
+            
+            
             min_node = min_scores[0]["node"]
+            # Evaluate h values to determine optimal node
             if len(min_scores) > 1:
                 min_h = math.inf
                 for score in min_scores:
