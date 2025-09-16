@@ -1,0 +1,40 @@
+Bevy:
+  length: 45.21320343559642
+  risk: 10.0
+  valid: true
+Chatter:
+  length: 12.485281374238571
+  risk: 5.0
+  valid: true
+Conclave:
+  length: 37.4558441227157
+  risk: 14.0
+  valid: true
+Coronation:
+  length: 49.79898987322332
+  risk: 27.0
+  valid: true
+Deceit:
+  length: 48.87005768508881
+  risk: 0.0
+  valid: true
+Flamboyance:
+  length: 18.071067811865476
+  risk: 0.0
+  valid: true
+Flotilla:
+  length: 26.798989873223334
+  risk: 16.0
+  valid: true
+Knot:
+  length: 50.0
+  risk: 27.0
+  valid: true
+Mewing:
+  length: 15.899494936611669
+  risk: 2.0
+  valid: true
+Wisdom:
+  length: 48.76955262170047
+  risk: 19.0
+  valid: true
